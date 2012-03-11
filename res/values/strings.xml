@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, EsperiaActivity!</string>
+    <string name="app_name">Esperia</string>
+    <string name="referer">http://www.esperia-rp.net/nous-aider/</string>
+    <string name="voteUrl">http://www.serveurs-minecraft.org/vote.php?id=9795</string>
+    <string name="notification_title">Esperia</string>
+    <string name="notification_initial_message">Il est temps de voter !</string>
+    <string name="notification_message">C\'est l\'heure de voter pour Esperia !</string>
+
+</resources>
