@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" >
+
+    <PreferenceCategory android:title="AAAA" >
+
+        <!--
+        <EditTextPreference 
+			android:dialogIcon="@android:drawable/ic_menu_recent_history" 
+			android:dialogTitle="@string/Option_Start_Offset" 
+			android:key="Option_Start_Offset" 
+			android:title="@string/Option_Start_Offset"
+			android:numeric="integer" 
+			android:maxLength="3" >
+		</EditTextPreference>
+        -->
+
+        <net.esperia.application.tools.TimePreference
+            android:defaultValue="24:00"
+            android:dependency="alarm"
+            android:key="widget_update_time"
+            android:summary="Durée entre chaque mise à jour du widget"
+            android:title="Mise à jour du widget" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

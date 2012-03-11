@@ -5,30 +5,44 @@
     android:versionName="1.0.1" >
 
     <uses-sdk android:minSdkVersion="8" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:icon="@drawable/icone"
         android:label="@string/app_name" >
         <activity
             android:name=".EsperiaActivity"
-            android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar">
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
-        <activity 
-            android:label="@string/app_name" 
-            android:name="VoteActivity" 
-            android:theme="@android:style/Theme.NoTitleBar"
-	        android:launchMode="singleTask"
-	        android:taskAffinity=""
-	        android:excludeFromRecents="true">
+        <activity
+            android:name="VoteActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".backend.AlarmReceiver"></receiver>
+
+        <receiver android:name=".backend.AlarmReceiver" >
+        </receiver>
+        <receiver android:name=".backend.ConnectedWidget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="net.esperia.application.backend.ACTION_WIDGET_RECEIVER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/connected_widget_info" />
+        </receiver>
     </application>
 
 </manifest>
