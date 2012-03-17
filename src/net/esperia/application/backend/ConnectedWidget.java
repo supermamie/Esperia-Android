@@ -1,19 +1,9 @@
 package net.esperia.application.backend;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.json.JSONException;
 
 import net.esperia.application.R;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
+import net.esperia.application.listConnected.ServerStatusObject;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -26,7 +16,7 @@ import android.widget.RemoteViews;
 public class ConnectedWidget extends AppWidgetProvider {
 
 	public static String ACTION_WIDGET_RECEIVER = "ActionReceiverWidget";
-
+	private final String TAG = "EsperiaWidget";
 
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		final int N = appWidgetIds.length;
@@ -36,7 +26,7 @@ public class ConnectedWidget extends AppWidgetProvider {
 		for (int i=0; i<N; i++) {
 			int appWidgetId = appWidgetIds[i];
 
-			Log.d("lalalalala", "onUpdateonUpdateonUpdateonUpdate"+appWidgetId);
+			Log.d(TAG, "onUpdateonUpdateonUpdateonUpdate"+appWidgetId);
 			/*
 			// Create an Intent to launch ExampleActivity
 			Intent intent = new Intent(context, EsperiaActivity.class);
@@ -59,14 +49,15 @@ public class ConnectedWidget extends AppWidgetProvider {
 			views.setOnClickPendingIntent(R.id.widget, actionPendingIntent);
 
 			// Tell the AppWidgetManager to perform an update on the current app widget
-			appWidgetManager.updateAppWidget(appWidgetId, views);
 			updateWidget(context, appWidgetId);
+			appWidgetManager.updateAppWidget(appWidgetId, views);
+			//updateWidget(context, appWidgetId);
 		}
 	}
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-
+		Log.d(TAG,"Message reçu par ici ! : "+intent.getAction());
 		// v1.5 fix that doesn't call onDelete Action
 		final String action = intent.getAction();
 		if (AppWidgetManager.ACTION_APPWIDGET_DELETED.equals(action)) {
@@ -83,9 +74,9 @@ public class ConnectedWidget extends AppWidgetProvider {
 				try {
 					appWidgetId = intent.getIntExtra("widgetId",-1);
 				} catch (NullPointerException e) {
-					Log.e("Error", "msg = null");
+					Log.e(TAG, "msg = null");
 				}
-				Log.d("lalalalala", "lalalalalalalalalala : "+appWidgetId);
+				Log.d(TAG, "lalalalalalalalalala : "+appWidgetId);
 				/*Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 				PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, 0);
 				NotificationManager notificationManager =
@@ -116,7 +107,16 @@ public class ConnectedWidget extends AppWidgetProvider {
 		views.setViewVisibility(R.id.progressBar, View.VISIBLE);
 		mAppWidManager.updateAppWidget(appWidgetId, views);
 		//maintenant on mets à jour le nombre et on réaffichera après
-		views.setTextViewText(R.id.textView, String.valueOf(getConnectedNumber()));
+		
+		String connected = "";
+		int connectedNumber = getConnectedNumber();
+		if(connectedNumber < 0) {
+			connected = "OFF";
+		} else {
+			connected = String.valueOf(connectedNumber);
+		}
+		
+		views.setTextViewText(R.id.textView, connected);
 		views.setViewVisibility(R.id.textView, View.VISIBLE);
 		views.setViewVisibility(R.id.progressBar, View.GONE);
 
@@ -125,7 +125,7 @@ public class ConnectedWidget extends AppWidgetProvider {
 
 	private int getConnectedNumber() {
 
-		String page = executeHttpGet();
+		/*String page = executeHttpGet();
 
 
 		//offline ?
@@ -151,23 +151,26 @@ public class ConnectedWidget extends AppWidgetProvider {
 				} catch (NumberFormatException e) {
 					connected = -1;
 				}
-				//Log.d("groupCount",""+m.groupCount());
-				// pour chaque groupe
-				/*for(int i=0; i<=m.groupCount(); i++) {
-					// affichage de la sous-chaîne capturée
-					Log.d("AAAAAAAAA","Groupe " + i + " : " + m.group(i));
-				}*/
 			} else {
-				Log.d("pattern",pattern);
-				Log.d("page",page);
-			}
+				Log.d(TAG, "pattern = "+pattern);
+				Log.d(TAG,"page = "+page);
+			}*/
 
-
-			return connected;//(int)Math.round(Math.random()*100);
+		int connected = -1;
+		ServerStatusObject status;
+		try {
+			status = new ServerStatusObject();
+			if(status != null && status.isOnline())
+				connected = status.getConnectedNumber();
+		} catch (JSONException e) {
+			
 		}
+
+		return connected;//(int)Math.round(Math.random()*100);
 	}
 
-	private String executeHttpGet() {
+
+	/*private String executeHttpGet() {
 		BufferedReader in = null;
 		String result = "";
 		try {
@@ -200,5 +203,5 @@ public class ConnectedWidget extends AppWidgetProvider {
 		}
 
 		return result;
-	}
+	}*/
 }

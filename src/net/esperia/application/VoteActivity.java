@@ -22,7 +22,7 @@ public class VoteActivity extends Activity {
 
 	WebView mWebView = null;
 	Context context = null;
-	private final boolean IS_DEBUG = true;
+	private final boolean IS_DEBUG = false;
 
 	/** Called when the activity is first created. */
 	@Override
