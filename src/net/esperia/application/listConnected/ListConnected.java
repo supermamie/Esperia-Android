@@ -26,9 +26,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 public class ListConnected extends ListActivity {
-	private ServerStatusObject connectedObject;
+	public static ServerStatusObject connectedObject;
 	private final int MULTIPLICATEUR_IMAGE = 15;
 
 	@Override
@@ -59,25 +60,34 @@ public class ListConnected extends ListActivity {
 			setListAdapter(new ConnectedArrayAdapter(ListConnected.this, result.getConnected()));
 			int listSize = result.getConnected().length;
 			
-			setTitle("Connectés :" + listSize);
+			setTitle("Connectés : " + listSize);
 			
-			for(int i = 0; i < listSize; i++)
-				new DownloadAvatarTask().execute(i);
+			new DownloadAvatarsTask().execute();
 		}
 	}
 	
-	private class DownloadAvatarTask extends AsyncTask<Integer, Void, Integer> {
-		protected Integer doInBackground(Integer... pos) {
-			connectedObject.setAvatar(pos[0], getFullAvatarBitmap(connectedObject.getLogin(pos[0])));
-			return pos[0];
+	private class DownloadAvatarsTask extends AsyncTask<Void, Void, Void> {
+		protected Void doInBackground(Void... pos) {
+			int listSize = connectedObject.getConnected().length;
+			for(int i = 0; i < listSize; i++)
+				connectedObject.setAvatar(i, getFullAvatarBitmap(connectedObject.getLogin(i)));
+			return null;
 		}
 
-		protected void onPostExecute(Integer pos) {
-			View child = getListView().getChildAt(pos);
-			ImageView im = (ImageView)child.findViewById(R.id.avatar);
-			Bitmap avatar = connectedObject.getAvatar(pos);
-			if(avatar != null)
-				im.setImageBitmap(avatar);
+		protected void onPostExecute(Void pos) {
+			ListView lv = getListView();
+			int listSize = connectedObject.getConnected().length;
+			for(int i = 0; i < listSize; i++) {
+				View child = lv.getChildAt(i);
+				if(child != null) {
+					ImageView im = (ImageView)child.findViewById(R.id.avatar);
+					Bitmap avatar = connectedObject.getAvatar(i);
+					if(im != null && avatar != null)
+						im.setImageBitmap(avatar);
+				}
+			}
+			
+			
 		}
 	}
 	

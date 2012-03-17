@@ -2,10 +2,13 @@ package net.esperia.application.listConnected;
 
 import net.esperia.application.R;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ConnectedArrayAdapter extends ArrayAdapter<String>{
@@ -26,12 +29,18 @@ public class ConnectedArrayAdapter extends ArrayAdapter<String>{
 
 		View rowView = inflater.inflate(R.layout.connectedlistitem, parent, false);
 		TextView textView = (TextView) rowView.findViewById(R.id.textView1);
+		ImageView imgView = (ImageView) rowView.findViewById(R.id.avatar);
 		
 		String login = values[position];
 		
 		textView.setText(login);
 
-		
+		Log.d("trucmuche","On affiche la vue n°"+position);
+		if(ListConnected.connectedObject != null) {
+			Bitmap avatar = ListConnected.connectedObject.getAvatar(position);
+			if(avatar != null)
+				imgView.setImageBitmap(avatar);
+		}
 		/*try {
 			imageView.setImageBitmap(getFullAvatarBitmap(login));
 		} catch (IOException e) {

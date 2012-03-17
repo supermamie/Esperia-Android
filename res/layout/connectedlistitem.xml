@@ -8,14 +8,14 @@
         android:id="@+id/avatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icone" />
+        android:src="@drawable/defaultavatar" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center_vertical"
-        android:paddingLeft="50px"
-        android:text="TextView" />
+        android:paddingLeft="20px"
+        android:text="Login" />
 
 </LinearLayout>
